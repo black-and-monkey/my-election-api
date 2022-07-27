@@ -1,7 +1,7 @@
-package com.black.monkey.my.election.api.web;
+package com.black.monkey.my.election.cmd.api.web.controller;
 
-import com.black.monkey.my.election.api.model.Message;
-import com.black.monkey.my.election.api.security.SecurityConfig;
+import com.black.monkey.my.election.cmd.api.security.SecurityConfig;
+import com.black.monkey.my.election.cmd.domain.Message;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

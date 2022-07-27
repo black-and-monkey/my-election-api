@@ -1,4 +1,4 @@
-package com.black.monkey.my.election.api.security;
+package com.black.monkey.my.election.cmd.api.security;
 
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;

@@ -1,4 +1,4 @@
-package com.black.monkey.my.election.api.model;
+package com.black.monkey.my.election.cmd.domain;
 
 /**
  * Simple domain object for our API to return a message.

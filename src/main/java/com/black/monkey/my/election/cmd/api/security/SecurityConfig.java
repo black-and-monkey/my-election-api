@@ -1,4 +1,4 @@
-package com.black.monkey.my.election.api.security;
+package com.black.monkey.my.election.cmd.api.security;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +31,8 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .mvcMatchers("/api/public").permitAll()
                 .mvcMatchers("/api/private").authenticated()
+                .mvcMatchers("/api/v1/open-crv").authenticated()
+                .mvcMatchers("/api/v1/close-crv/*").authenticated()
                 .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
