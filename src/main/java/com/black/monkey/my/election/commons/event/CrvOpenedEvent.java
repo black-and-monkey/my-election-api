@@ -1,20 +1,16 @@
 package com.black.monkey.my.election.commons.event;
 
 import com.black.monkey.my.election.core.event.BaseEvent;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder
+@Setter
+@Getter
+@ToString
 public class CrvOpenedEvent extends BaseEvent {
 
     private LocalDateTime timestamp;
-    private String by;
-
 }

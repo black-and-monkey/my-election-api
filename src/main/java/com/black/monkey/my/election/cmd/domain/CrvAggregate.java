@@ -19,11 +19,10 @@ public class CrvAggregate extends AggregateRoot {
     private boolean opened;
 
     public CrvAggregate(OpenCrvCommand openCrvCommand) {
-       raiseEvent(CrvOpenedEvent.builder()
-               .id(openCrvCommand.getId())
-               .by("") // TODO
-               .timestamp(LocalDateTime.now(Clock.systemUTC()))
-               .build());
+        CrvOpenedEvent event = new CrvOpenedEvent();
+        event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
+        event.setId(openCrvCommand.getId());
+        raiseEvent(event);
     }
 
     public void apply(CrvOpenedEvent event) {
@@ -35,11 +34,11 @@ public class CrvAggregate extends AggregateRoot {
         if (!this.opened) {
             throw new IllegalStateException("The crv has already been closed!");
         }
-        raiseEvent(CrvClosedEvent.builder()
-                .id(this.id)
-                .by("") // TODO
-                .timestamp(LocalDateTime.now(Clock.systemUTC()))
-                .build());
+
+        CrvClosedEvent event = new CrvClosedEvent();
+        event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
+        event.setId(this.id);
+        raiseEvent(event);
     }
 
     public void apply(CrvClosedEvent event) {

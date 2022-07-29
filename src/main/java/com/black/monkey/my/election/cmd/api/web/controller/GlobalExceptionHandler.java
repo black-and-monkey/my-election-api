@@ -1,6 +1,7 @@
 package com.black.monkey.my.election.cmd.api.web.controller;
 
 import com.black.monkey.my.election.core.exceptions.AggregateNotFoundException;
+import com.black.monkey.my.election.core.exceptions.UserWithoutCRVException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
     public void exception(AggregateNotFoundException exception) {
+        log.warn("{}", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public void exception(IllegalStateException exception) {
         log.warn("{}", exception.getMessage());
     }
 

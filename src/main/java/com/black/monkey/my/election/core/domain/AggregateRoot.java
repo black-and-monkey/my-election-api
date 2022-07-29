@@ -1,5 +1,6 @@
 package com.black.monkey.my.election.core.domain;
 
+import com.black.monkey.my.election.commons.helper.TokenHelper;
 import com.black.monkey.my.election.core.event.BaseEvent;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,10 +44,14 @@ public class AggregateRoot {
     }
 
     public void raiseEvent(BaseEvent event) {
+        event.setSub(TokenHelper.decodeToken().get("sub").toString());
+        event.setEmail(TokenHelper.decodeToken().get("email").toString());
         applyChange(event, true);
     }
 
     public void replayEvent(Iterable<BaseEvent> events) {
         events.forEach( event -> applyChange(event, false));
     }
+
+
 }

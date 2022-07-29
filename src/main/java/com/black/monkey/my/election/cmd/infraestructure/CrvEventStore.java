@@ -11,6 +11,7 @@ import com.black.monkey.my.election.core.producers.EventProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CrvEventStore implements EventStore {
 
     private final EventStoreRepository eventStoreRepository;
@@ -50,7 +52,7 @@ public class CrvEventStore implements EventStore {
                     .eventDataJson(object2json(event))
                     .build());
 
-            if (persistedEvent.getId()!=null) {
+            if (persistedEvent.getId() != null) {
                 eventProducer.producer(event.getClass().getSimpleName(), event);
             }
         }
@@ -72,6 +74,7 @@ public class CrvEventStore implements EventStore {
         try {
            return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
+            log.error("{}",e.getMessage(),e);
             throw new RuntimeException("couldn't covert to json");
         }
     }
