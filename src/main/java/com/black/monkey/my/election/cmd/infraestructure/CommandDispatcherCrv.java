@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CrvCommandDispatcher implements CommandDispatcher {
+public class CommandDispatcherCrv implements CommandDispatcher {
 
     private final Map<Class<? extends BaseCommand>, List<CommandHandlerMethod>> routes = new HashMap<>();
 

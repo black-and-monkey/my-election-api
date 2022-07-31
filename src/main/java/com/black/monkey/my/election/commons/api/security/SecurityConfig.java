@@ -1,4 +1,4 @@
-package com.black.monkey.my.election.cmd.api.security;
+package com.black.monkey.my.election.commons.api.security;
 
 
 import com.nimbusds.jose.KeySourceException;
@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .mvcMatchers("/api/private").authenticated()
                 .mvcMatchers("/api/v1/open-crv").authenticated()
                 .mvcMatchers("/api/v1/close-crv").authenticated()
+                .mvcMatchers("/api/v1/vote-registration").authenticated()
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
                 .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()

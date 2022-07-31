@@ -1,13 +1,12 @@
-package com.black.monkey.my.election.cmd.api.web.controller;
+package com.black.monkey.my.election.cmd.api.controller;
 
-import com.black.monkey.my.election.cmd.api.web.command.CloseCrvCommand;
+import com.black.monkey.my.election.cmd.api.command.CloseCrvCommand;
 import com.black.monkey.my.election.cmd.infraestructure.CommandDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

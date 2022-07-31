@@ -1,8 +1,9 @@
 package com.black.monkey.my.election.cmd.domain;
 
-import com.black.monkey.my.election.cmd.api.web.command.OpenCrvCommand;
+import com.black.monkey.my.election.cmd.api.command.OpenCrvCommand;
 import com.black.monkey.my.election.commons.event.CrvClosedEvent;
 import com.black.monkey.my.election.commons.event.CrvOpenedEvent;
+import com.black.monkey.my.election.commons.event.VoteRegisteredEvent;
 import com.black.monkey.my.election.core.domain.AggregateRoot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.Setter;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,6 +20,7 @@ import java.time.LocalDateTime;
 public class CrvAggregate extends AggregateRoot {
 
     private boolean opened;
+    private Set<Vote> voteList;
 
     public CrvAggregate(OpenCrvCommand openCrvCommand) {
         CrvOpenedEvent event = new CrvOpenedEvent();
@@ -28,12 +32,11 @@ public class CrvAggregate extends AggregateRoot {
     public void apply(CrvOpenedEvent event) {
         this.id = event.getId();
         this.opened = true;
+        this.voteList = new HashSet<>();
     }
 
     public void close() {
-        if (!this.opened) {
-            throw new IllegalStateException("The crv has already been closed!");
-        }
+        opened();
 
         CrvClosedEvent event = new CrvClosedEvent();
         event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
@@ -45,4 +48,27 @@ public class CrvAggregate extends AggregateRoot {
         this.id = event.getId();
         this.opened = false;
     }
+
+    public void registerVote(Vote vote) {
+
+        opened();
+
+        VoteRegisteredEvent event = new VoteRegisteredEvent();
+        event.setId(this.getId());
+        event.setVote(vote);
+        raiseEvent(event);
+    }
+
+    public void apply(VoteRegisteredEvent event) {
+        this.id = event.getId();
+        voteList.add(event.getVote());
+    }
+
+    private void opened() {
+        if (!this.opened) {
+            throw new IllegalStateException("The crv has already been closed!");
+        }
+    }
+
+
 }

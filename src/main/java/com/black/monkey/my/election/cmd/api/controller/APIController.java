@@ -1,6 +1,6 @@
-package com.black.monkey.my.election.cmd.api.web.controller;
+package com.black.monkey.my.election.cmd.api.controller;
 
-import com.black.monkey.my.election.cmd.api.security.SecurityConfig;
+import com.black.monkey.my.election.commons.api.security.SecurityConfig;
 import com.black.monkey.my.election.cmd.domain.Message;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(path = "api", produces = MediaType.APPLICATION_JSON_VALUE)
+@Deprecated
 // For simplicity of this sample, allow all origins. Real applications should configure CORS for their use case.
 @CrossOrigin(origins = "*")
 public class APIController {

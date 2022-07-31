@@ -1,4 +1,4 @@
-package com.black.monkey.my.election.cmd.api.web.command;
+package com.black.monkey.my.election.cmd.api.command;
 
 import com.black.monkey.my.election.core.command.BaseCommand;
 import lombok.AllArgsConstructor;
