@@ -38,7 +38,8 @@ public class SecurityConfig {
                 .mvcMatchers("/api/public").permitAll()
                 .mvcMatchers("/api/private").authenticated()
                 .mvcMatchers("/api/v1/open-crv").authenticated()
-                .mvcMatchers("/api/v1/close-crv/*").authenticated()
+                .mvcMatchers("/api/v1/close-crv").authenticated()
+                .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
                 .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();

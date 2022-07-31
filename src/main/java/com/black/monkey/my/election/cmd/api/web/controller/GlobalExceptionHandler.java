@@ -1,6 +1,7 @@
 package com.black.monkey.my.election.cmd.api.web.controller;
 
 import com.black.monkey.my.election.core.exceptions.AggregateNotFoundException;
+import com.black.monkey.my.election.core.exceptions.CrvDoesntExistException;
 import com.black.monkey.my.election.core.exceptions.UserWithoutCRVException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public void exception(IllegalStateException exception) {
         log.warn("{}", exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler
+    public void exception(CrvDoesntExistException exception) {
+        log.error("{}", exception.getMessage());
     }
 
 }

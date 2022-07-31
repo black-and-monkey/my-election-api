@@ -1,5 +1,6 @@
 package com.black.monkey.my.election.query.domain;
 
+import com.black.monkey.my.election.core.domain.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "crv", schema = "my_election")
 @Getter
 @Setter
-public class Crv {
+public class Crv extends BaseEntity {
 
     @Id
     private String id;

@@ -2,6 +2,7 @@ package com.black.monkey.my.election.commons.client;
 
 import com.black.monkey.my.election.commons.client.auth0.dto.GetUserResponse;
 import com.black.monkey.my.election.commons.helper.TokenHelper;
+import com.black.monkey.my.election.core.exceptions.UserWithoutCRVException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.text.MessageFormat;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -105,6 +107,8 @@ public class Auth0Client {
 
     public GetUserResponse getUser() {
 
+        // TODO add cache // REDIS ?
+
         ResponseEntity<GetUserResponse> userResponse = getUser(TokenHelper.decodeToken().get("sub").toString());
 
         if (userResponse.hasBody()) {
@@ -112,5 +116,14 @@ public class Auth0Client {
         }
 
        throw new IllegalStateException("couldn't get the user from auth0");
+    }
+
+    public String getUserCrv() {
+        GetUserResponse user = getUser();
+
+        if (!user.getAppMetadata().containsKey("crv")) {
+            throw new UserWithoutCRVException(MessageFormat.format("user {0}", user.getEmail()));
+        }
+        return user.getAppMetadata().get("crv").toString();
     }
 }

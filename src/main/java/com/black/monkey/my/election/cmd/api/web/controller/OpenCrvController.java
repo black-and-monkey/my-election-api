@@ -26,14 +26,8 @@ public class OpenCrvController {
     @PostMapping
     public ResponseEntity openCrv() {
 
-        GetUserResponse user = auth0Client.getUser();
-
-        if (!user.getAppMetadata().containsKey("crv")) {
-            throw new UserWithoutCRVException(MessageFormat.format("user {0}", user.getEmail()));
-        }
-
         OpenCrvCommand command = new OpenCrvCommand();
-        command.setId(user.getAppMetadata().get("crv").toString());
+        command.setId(auth0Client.getUserCrv());
 
         commandDispatcher.send(command);
         return ResponseEntity.ok().build();
