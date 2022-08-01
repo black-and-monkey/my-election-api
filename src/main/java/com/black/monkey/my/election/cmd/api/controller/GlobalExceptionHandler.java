@@ -1,11 +1,12 @@
 package com.black.monkey.my.election.cmd.api.controller;
 
-import com.black.monkey.my.election.cmd.domain.Message;
 import com.black.monkey.my.election.commons.api.dto.BaseResponse;
+import com.black.monkey.my.election.commons.helper.UruguayanCiTool;
 import com.black.monkey.my.election.core.exceptions.AggregateNotFoundException;
 import com.black.monkey.my.election.core.exceptions.CrvDoesntExistException;
+import com.black.monkey.my.election.core.exceptions.CrvIsOpenException;
+import com.black.monkey.my.election.core.exceptions.InvalidDobException;
 import com.black.monkey.my.election.core.exceptions.PreviousVoteException;
-import com.black.monkey.my.election.core.exceptions.UserWithoutCRVException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,10 +34,10 @@ public class GlobalExceptionHandler {
         log.warn("{}", exception.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public void exception(IllegalStateException exception) {
+    public ResponseEntity<BaseResponse> exception(IllegalStateException exception) {
         log.warn("{}", exception.getMessage());
+        return new ResponseEntity(BaseResponse.builder().message(exception.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -46,10 +47,27 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<BaseResponse> exception(CrvIsOpenException exception) {
+        log.warn("{}", exception.getMessage());
+        return new ResponseEntity(BaseResponse.builder().message(exception.getMessage()).build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<BaseResponse> exception(PreviousVoteException exception) {
         log.warn("{}", exception.getMessage());
-        return ResponseEntity.of(Optional.of(BaseResponse.builder().message(exception.getMessage()).build()));
+        return new ResponseEntity(BaseResponse.builder().message(exception.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<BaseResponse> exception(UruguayanCiTool.InvalidId exception) {
+        return new ResponseEntity(BaseResponse.builder().message(exception.getMessage()).build(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<BaseResponse> exception(InvalidDobException exception) {
+        return new ResponseEntity(BaseResponse.builder().message(exception.getMessage()).build(), HttpStatus.BAD_REQUEST);
+    }
+
 
 
 }

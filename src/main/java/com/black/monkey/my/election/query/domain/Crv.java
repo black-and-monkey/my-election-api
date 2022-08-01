@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,5 +34,10 @@ public class Crv extends BaseEntity {
 
     @OneToOne
     private MyUser closedBy;
+
+    @Enumerated(EnumType.STRING)
+    private Departamento departamento;
+
+    private String localidad;
 
 }

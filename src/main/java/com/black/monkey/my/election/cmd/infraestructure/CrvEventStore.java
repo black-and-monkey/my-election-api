@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,10 +62,9 @@ public class CrvEventStore implements EventStore {
     @Override
     public List<BaseEvent> getEvents(String aggregateId) {
         List<EventModel> eventModels = eventStoreRepository.findByAggregateIdentifier(aggregateId);
-        if (eventModels == null || eventModels.isEmpty()) {
-            throw new AggregateNotFoundException(MessageFormat.format("Incorrect account id provider: {0}",aggregateId));
+        if (eventModels.isEmpty()) {
+            return Collections.emptyList();
         }
-
 
         return eventModels.stream().map( x -> x.getEventData(mapper)).collect(Collectors.toList());
     }

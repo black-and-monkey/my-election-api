@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.text.MessageFormat;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -23,10 +24,7 @@ public class CrvAggregate extends AggregateRoot {
     private Set<Vote> voteList;
 
     public CrvAggregate(OpenCrvCommand openCrvCommand) {
-        CrvOpenedEvent event = new CrvOpenedEvent();
-        event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
-        event.setId(openCrvCommand.getId());
-        raiseEvent(event);
+       open(openCrvCommand.getId());
     }
 
     public void apply(CrvOpenedEvent event) {
@@ -66,9 +64,15 @@ public class CrvAggregate extends AggregateRoot {
 
     private void opened() {
         if (!this.opened) {
-            throw new IllegalStateException("The crv has already been closed!");
+            throw new IllegalStateException(MessageFormat.format("CRV {0} esta cerrado, no se pueden registrar mas votos",this.id));
         }
     }
 
 
+    public void open(String id) {
+        CrvOpenedEvent event = new CrvOpenedEvent();
+        event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
+        event.setId(id);
+        raiseEvent(event);
+    }
 }

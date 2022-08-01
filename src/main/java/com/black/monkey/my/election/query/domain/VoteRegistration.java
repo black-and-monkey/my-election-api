@@ -55,4 +55,6 @@ public class VoteRegistration extends BaseEntity {
     @OneToOne
     private MyUser registeredBy;
 
+    private Long voteNumber;
+
 }

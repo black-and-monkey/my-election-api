@@ -4,6 +4,7 @@ package com.black.monkey.my.election.query.infraestructure;
 import com.black.monkey.my.election.core.domain.BaseEntity;
 import com.black.monkey.my.election.core.queries.BaseQuery;
 import com.black.monkey.my.election.core.queries.QueryHandlerMethod;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class QueryDispatcherCrv implements QueryDispatcher {
     }
 
     @Override
-    public <U extends BaseEntity> List<U> send(BaseQuery query) {
+    public <U extends BaseEntity> Page<U> send(BaseQuery query) {
         var handlers = routes.get(query.getClass());
         if (handlers == null || handlers.size() <= 0) {
             throw new RuntimeException("No query handler was registered!");
