@@ -11,6 +11,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -37,11 +38,12 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .mvcMatchers("/api/public").permitAll()
                 .mvcMatchers("/api/private").authenticated()
+                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .mvcMatchers("/api/v1/open-crv").authenticated()
                 .mvcMatchers("/api/v1/close-crv").authenticated()
-                .mvcMatchers("/api/v1/vote-registration").authenticated()
+                .antMatchers(HttpMethod.POST,"/api/v1/vote-registration").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/v1/vote-registration").authenticated()
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
-                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .and().cors()
                 .and().oauth2ResourceServer().jwt();
         return http.build();

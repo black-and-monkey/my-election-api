@@ -1,5 +1,6 @@
 package com.black.monkey.my.election.commons.client;
 
+import com.black.monkey.my.election.commons.client.auth0.dto.GetUserPermissions;
 import com.black.monkey.my.election.commons.client.auth0.dto.GetUserResponse;
 import com.black.monkey.my.election.commons.helper.TokenHelper;
 import com.black.monkey.my.election.core.exceptions.UserWithoutCRVException;
@@ -44,6 +45,9 @@ public class Auth0Client {
     private ResponseEntity<LinkedHashMap> tokenResponse;
 
     private Instant tokenExpirationTime;
+
+    private Map<String, GetUserResponse> userResponseCache = new HashMap<>(); // TODO swap to REDIS
+    private Map<String, GetUserPermissions> userPermissionsResponseCache = new HashMap<>(); // TODO swap to REDIS
 
     @PostConstruct
     void init() {
@@ -107,15 +111,43 @@ public class Auth0Client {
 
     public GetUserResponse getUser() {
 
-        // TODO add cache // REDIS ?
+        String sub = TokenHelper.decodeToken().get("sub").toString();
 
-        ResponseEntity<GetUserResponse> userResponse = getUser(TokenHelper.decodeToken().get("sub").toString());
+        if (userResponseCache.containsKey(sub)) {
+            return userResponseCache.get(sub);
+        }
+
+        ResponseEntity<GetUserResponse> userResponse = getUser(sub);
 
         if (userResponse.hasBody()) {
+            userResponseCache.put(sub,userResponse.getBody());
             return userResponse.getBody();
         }
 
        throw new IllegalStateException("couldn't get the user from auth0");
+    }
+
+    public GetUserPermissions getUserPermissions() {
+        String sub = TokenHelper.decodeToken().get("sub").toString();
+
+        if (userPermissionsResponseCache.containsKey(sub)) {
+            return userPermissionsResponseCache.get(sub);
+        }
+
+        String url = String.format("%s/api/v2/users/%s/permissions?include_totals=true", baseUrl, sub);
+        log.debug(url);
+        ResponseEntity<GetUserPermissions> responseEntity = restTemplate.exchange(
+                url,  // URL
+                HttpMethod.GET,
+                new HttpEntity<>(buildHeadersForAuth0Api()),
+                GetUserPermissions.class);
+
+        if (responseEntity.getStatusCode().is2xxSuccessful() || responseEntity.hasBody()) {
+            userPermissionsResponseCache.put(sub,responseEntity.getBody());
+            return responseEntity.getBody();
+        }
+
+        throw new RuntimeException(MessageFormat.format("couldn't get permissions for user {0}",sub));
     }
 
     public String getUserCrv() {

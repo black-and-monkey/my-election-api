@@ -5,5 +5,7 @@ public interface CommandHandler {
     void handler(OpenCrvCommand command);
     void handler(CloseCrvCommand command);
     void handler(VoteRegistrationCommand command);
+    void handler(VoteUnRegistrationCommand command);
+
 
 }

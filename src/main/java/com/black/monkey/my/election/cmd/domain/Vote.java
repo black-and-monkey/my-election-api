@@ -3,6 +3,7 @@ package com.black.monkey.my.election.cmd.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
+@ToString
 public class Vote {
 
     private LocalDateTime timestamp;

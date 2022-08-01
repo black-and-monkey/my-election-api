@@ -4,6 +4,7 @@ import com.black.monkey.my.election.cmd.api.command.OpenCrvCommand;
 import com.black.monkey.my.election.commons.event.CrvClosedEvent;
 import com.black.monkey.my.election.commons.event.CrvOpenedEvent;
 import com.black.monkey.my.election.commons.event.VoteRegisteredEvent;
+import com.black.monkey.my.election.commons.event.VoteUnRegisteredEvent;
 import com.black.monkey.my.election.core.domain.AggregateRoot;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Set;
 public class CrvAggregate extends AggregateRoot {
 
     private boolean opened;
-    private Set<Vote> voteList;
+    private Set<Vote> voteList; // FIXME I guess we can remove it !!
 
     public CrvAggregate(OpenCrvCommand openCrvCommand) {
        open(openCrvCommand.getId());
@@ -68,11 +69,23 @@ public class CrvAggregate extends AggregateRoot {
         }
     }
 
-
     public void open(String id) {
         CrvOpenedEvent event = new CrvOpenedEvent();
         event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
         event.setId(id);
         raiseEvent(event);
     }
+
+    public void unRegisterVote(Vote vote) {
+        VoteUnRegisteredEvent event = new VoteUnRegisteredEvent();
+        event.setId(this.getId());
+        event.setVote(vote);
+        raiseEvent(event);
+    }
+
+    public void apply(VoteUnRegisteredEvent event) {
+        this.id = event.getId();
+        voteList.remove(event.getVote());
+    }
+
 }

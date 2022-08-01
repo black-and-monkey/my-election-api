@@ -3,6 +3,7 @@ package com.black.monkey.my.election.query.infraestructure;
 import com.black.monkey.my.election.commons.event.CrvClosedEvent;
 import com.black.monkey.my.election.commons.event.CrvOpenedEvent;
 import com.black.monkey.my.election.commons.event.VoteRegisteredEvent;
+import com.black.monkey.my.election.commons.event.VoteUnRegisteredEvent;
 import com.black.monkey.my.election.core.event.BaseEvent;
 import com.black.monkey.my.election.query.domain.Crv;
 import com.black.monkey.my.election.query.domain.MyUser;
@@ -81,6 +82,15 @@ public class CrvEventHandler implements EventHandler {
                     .build());
         } else {
             log.warn("couldn't find CRV, {}, vote NOT registered !!", event.getId());
+        }
+    }
+
+    @Override
+    public void handler(VoteUnRegisteredEvent event) {
+        log.debug("handler {}",event);
+        Optional<VoteRegistration> optional = voteRegistrationRepository.findByCi(event.getVote().getCi());
+        if (optional.isPresent()) {
+            voteRegistrationRepository.delete(optional.get());
         }
     }
 

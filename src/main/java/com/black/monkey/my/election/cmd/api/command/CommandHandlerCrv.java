@@ -62,7 +62,7 @@ public class CommandHandlerCrv implements CommandHandler {
     @Override
     public void handler(VoteRegistrationCommand command) {
 
-        //UruguayanCiTool.check(command.getCi());
+        UruguayanCiTool.check(command.getCi());
 
         if (command.getDob().isBefore(LocalDate.of(1991,11,6)) ||
                 command.getDob().isAfter(LocalDate.of(2008,11,5))) {
@@ -76,10 +76,27 @@ public class CommandHandlerCrv implements CommandHandler {
 
         CrvAggregate aggregateRoot = eventSourcingHandler.getById(command.getId());
         aggregateRoot.registerVote(Vote.builder()
-                        .ci(command.getCi())
-                        .fullName(command.getFullName())
-                        .dob(command.getDob())
-                        .timestamp(LocalDateTime.now(Clock.systemUTC()))
+                .ci(StringUtils.getDigits(command.getCi()))
+                .fullName(command.getFullName())
+                .dob(command.getDob())
+                .timestamp(LocalDateTime.now(Clock.systemUTC()))
+                .build());
+
+        eventSourcingHandler.save(aggregateRoot);
+    }
+
+    @Override
+    public void handler(VoteUnRegistrationCommand command) {
+        Optional<VoteRegistration> previousVote = voteRegistrationRepository.findByCi(StringUtils.getDigits(command.getCi()));
+        if (previousVote.isEmpty()) {
+            throw new PreviousVoteException(MessageFormat.format("No existe voto para la CI, {0}", command.getCi()));
+        }
+
+        CrvAggregate aggregateRoot = eventSourcingHandler.getById(previousVote.get().getCrv().getId());
+
+        aggregateRoot.unRegisterVote(Vote.builder()
+                .timestamp(LocalDateTime.now(Clock.systemUTC()))
+                .ci(StringUtils.getDigits(command.getCi()))
                 .build());
 
         eventSourcingHandler.save(aggregateRoot);

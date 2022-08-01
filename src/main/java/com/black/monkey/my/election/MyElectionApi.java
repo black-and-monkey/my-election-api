@@ -5,10 +5,12 @@ import com.black.monkey.my.election.cmd.api.command.CloseCrvCommand;
 import com.black.monkey.my.election.cmd.api.command.CommandHandler;
 import com.black.monkey.my.election.cmd.api.command.OpenCrvCommand;
 import com.black.monkey.my.election.cmd.api.command.VoteRegistrationCommand;
+import com.black.monkey.my.election.cmd.api.command.VoteUnRegistrationCommand;
 import com.black.monkey.my.election.cmd.infraestructure.CommandDispatcher;
 import com.black.monkey.my.election.commons.event.CrvClosedEvent;
 import com.black.monkey.my.election.commons.event.CrvOpenedEvent;
 import com.black.monkey.my.election.commons.event.VoteRegisteredEvent;
+import com.black.monkey.my.election.commons.event.VoteUnRegisteredEvent;
 import com.black.monkey.my.election.query.api.query.FindCrvByIdQuery;
 import com.black.monkey.my.election.query.api.query.FindRegisteredVotesQuery;
 import com.black.monkey.my.election.query.hanlder.EventHandler;
@@ -51,10 +53,13 @@ public class MyElectionApi {
         commandDispatcher.registerHandler(OpenCrvCommand.class, commandHandler::handler);
         commandDispatcher.registerHandler(CloseCrvCommand.class, commandHandler::handler);
         commandDispatcher.registerHandler(VoteRegistrationCommand.class, commandHandler::handler);
+        commandDispatcher.registerHandler(VoteUnRegistrationCommand.class, commandHandler::handler);
+
 
         eventDispatcher.registerHandler(CrvOpenedEvent.class, eventHandler::handler);
         eventDispatcher.registerHandler(CrvClosedEvent.class, eventHandler::handler);
         eventDispatcher.registerHandler(VoteRegisteredEvent.class, eventHandler::handler);
+        eventDispatcher.registerHandler(VoteUnRegisteredEvent.class, eventHandler::handler);
 
         queryDispatcher.registerHandler(FindCrvByIdQuery.class, queryHandler::handle);
         queryDispatcher.registerHandler(FindRegisteredVotesQuery.class, queryHandler::handle);
