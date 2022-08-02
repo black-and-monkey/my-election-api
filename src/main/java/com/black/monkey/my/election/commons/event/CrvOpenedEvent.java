@@ -12,5 +12,4 @@ import java.time.LocalDateTime;
 @ToString
 public class CrvOpenedEvent extends BaseEvent {
 
-    private LocalDateTime timestamp;
 }

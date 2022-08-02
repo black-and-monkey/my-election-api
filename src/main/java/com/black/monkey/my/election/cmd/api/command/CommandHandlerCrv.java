@@ -1,7 +1,8 @@
 package com.black.monkey.my.election.cmd.api.command;
 
 import com.black.monkey.my.election.cmd.domain.CrvAggregate;
-import com.black.monkey.my.election.cmd.domain.Vote;
+import com.black.monkey.my.election.cmd.domain.NoteVO;
+import com.black.monkey.my.election.cmd.domain.VoteVO;
 import com.black.monkey.my.election.commons.helper.UruguayanCiTool;
 import com.black.monkey.my.election.core.exceptions.CrvDoesntExistException;
 import com.black.monkey.my.election.core.exceptions.CrvIsOpenException;
@@ -55,7 +56,7 @@ public class CommandHandlerCrv implements CommandHandler {
     @Override
     public void handler(CloseCrvCommand command) {
         CrvAggregate aggregateRoot = eventSourcingHandler.getById(command.getId());
-        aggregateRoot.close();
+        aggregateRoot.close(command.getNote());
         eventSourcingHandler.save(aggregateRoot);
     }
 
@@ -75,7 +76,7 @@ public class CommandHandlerCrv implements CommandHandler {
         }
 
         CrvAggregate aggregateRoot = eventSourcingHandler.getById(command.getId());
-        aggregateRoot.registerVote(Vote.builder()
+        aggregateRoot.registerVote(VoteVO.builder()
                 .ci(StringUtils.getDigits(command.getCi()))
                 .fullName(command.getFullName())
                 .dob(command.getDob())
@@ -94,9 +95,20 @@ public class CommandHandlerCrv implements CommandHandler {
 
         CrvAggregate aggregateRoot = eventSourcingHandler.getById(previousVote.get().getCrv().getId());
 
-        aggregateRoot.unRegisterVote(Vote.builder()
+        aggregateRoot.unRegisterVote(VoteVO.builder()
                 .timestamp(LocalDateTime.now(Clock.systemUTC()))
                 .ci(StringUtils.getDigits(command.getCi()))
+                .build());
+
+        eventSourcingHandler.save(aggregateRoot);
+    }
+
+    @Override
+    public void handler(NoteAddCommand command) {
+        CrvAggregate aggregateRoot = eventSourcingHandler.getById(command.getId());
+
+        aggregateRoot.addNote(NoteVO.builder()
+                .note(command.getNote())
                 .build());
 
         eventSourcingHandler.save(aggregateRoot);

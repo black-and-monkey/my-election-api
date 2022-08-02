@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class AggregateRoot {
     }
 
     public void raiseEvent(BaseEvent event) {
+        event.setTimestamp(LocalDateTime.now(Clock.systemUTC()));
         event.setSub(TokenHelper.decodeToken().get("sub").toString());
         event.setEmail(TokenHelper.decodeToken().get("email").toString());
         applyChange(event, true);

@@ -1,6 +1,6 @@
 package com.black.monkey.my.election.commons.event;
 
-import com.black.monkey.my.election.cmd.domain.VoteVO;
+import com.black.monkey.my.election.cmd.domain.NoteVO;
 import com.black.monkey.my.election.core.event.BaseEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 
-public class VoteUnRegisteredEvent extends BaseEvent {
+public class NoteAddedEvent extends BaseEvent {
 
-    private VoteVO vote;
+    private NoteVO note;
 }

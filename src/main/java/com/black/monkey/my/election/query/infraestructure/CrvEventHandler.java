@@ -2,15 +2,18 @@ package com.black.monkey.my.election.query.infraestructure;
 
 import com.black.monkey.my.election.commons.event.CrvClosedEvent;
 import com.black.monkey.my.election.commons.event.CrvOpenedEvent;
+import com.black.monkey.my.election.commons.event.NoteAddedEvent;
 import com.black.monkey.my.election.commons.event.VoteRegisteredEvent;
 import com.black.monkey.my.election.commons.event.VoteUnRegisteredEvent;
 import com.black.monkey.my.election.core.event.BaseEvent;
 import com.black.monkey.my.election.query.domain.Crv;
 import com.black.monkey.my.election.query.domain.MyUser;
+import com.black.monkey.my.election.query.domain.Note;
 import com.black.monkey.my.election.query.domain.VoteRegistration;
 import com.black.monkey.my.election.query.hanlder.EventHandler;
 import com.black.monkey.my.election.query.repository.CrvRepository;
 import com.black.monkey.my.election.query.repository.MyUserRepository;
+import com.black.monkey.my.election.query.repository.NoteRepository;
 import com.black.monkey.my.election.query.repository.VoteRegistrationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,7 @@ public class CrvEventHandler implements EventHandler {
     private final MyUserRepository myUserRepository;
     private final CrvRepository crvRepository;
     private final VoteRegistrationRepository voteRegistrationRepository;
+    private final NoteRepository noteRepository;
 
     @Override
     public void handler(CrvOpenedEvent event) {
@@ -91,6 +95,23 @@ public class CrvEventHandler implements EventHandler {
         Optional<VoteRegistration> optional = voteRegistrationRepository.findByCi(event.getVote().getCi());
         if (optional.isPresent()) {
             voteRegistrationRepository.delete(optional.get());
+        }
+    }
+
+    @Override
+    public void handler(NoteAddedEvent event) {
+        log.debug("handler {}",event);
+
+        Optional<Crv> optionalCrv = crvRepository.findById(event.getId());
+        if (optionalCrv.isPresent()) {
+            noteRepository.save(Note.builder()
+                            .crv(optionalCrv.get())
+                            .note(event.getNote().getNote())
+                            .registeredBy(getUser(event).orElse(null))
+                            .timestamp(LocalDateTime.now(Clock.systemUTC()))
+                    .build());
+        } else {
+            log.warn("couldn't find CRV, {}, vote NOT registered !!", event.getId());
         }
     }
 

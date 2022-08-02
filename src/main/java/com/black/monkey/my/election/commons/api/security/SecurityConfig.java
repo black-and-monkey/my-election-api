@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
                 .mvcMatchers("/api/v1/open-crv").authenticated()
                 .mvcMatchers("/api/v1/close-crv").authenticated()
+                .mvcMatchers("/api/v1/note").authenticated()
                 .antMatchers(HttpMethod.POST,"/api/v1/vote-registration").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/api/v1/vote-registration").authenticated()
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()

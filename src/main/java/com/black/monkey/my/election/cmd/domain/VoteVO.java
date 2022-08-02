@@ -14,12 +14,13 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @ToString
-public class Vote {
+public class VoteVO {
 
     private LocalDateTime timestamp;
     private LocalDate dob;
     private String fullName;
     private String ci;
+    private String registerBy;
 
     @Override
     public boolean equals(Object o) {
@@ -27,7 +28,7 @@ public class Vote {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        Vote vote = (Vote) o;
+        VoteVO vote = (VoteVO) o;
 
         return new EqualsBuilder().append(ci, vote.ci).isEquals();
     }
