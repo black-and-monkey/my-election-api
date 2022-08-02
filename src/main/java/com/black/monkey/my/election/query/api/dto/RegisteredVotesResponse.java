@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -24,5 +25,6 @@ public class RegisteredVotesResponse {
         private String fullName;
         private LocalDate dob;
         private String ci;
+        private LocalDateTime timestamp;
     }
 }

@@ -151,6 +151,7 @@ public class CrvLookupController {
                     .dob(vote.getDob())
                     .fullName(vote.getFullName())
                     .voteNumber(vote.getVoteNumber())
+                    .timestamp(vote.getTimestamp())
                     .build());
         }
         return response;
