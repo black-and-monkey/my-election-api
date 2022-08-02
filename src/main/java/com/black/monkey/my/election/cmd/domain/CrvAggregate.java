@@ -107,7 +107,7 @@ public class CrvAggregate extends AggregateRoot {
 
     private void opened() {
         if (!this.opened) {
-            throw new IllegalStateException(MessageFormat.format("CRV {0} esta cerrado, no se pueden registrar mas votos",this.id));
+            throw new IllegalStateException("CRV esta cerrado, no se pueden registrar mas votos");
         }
     }
 

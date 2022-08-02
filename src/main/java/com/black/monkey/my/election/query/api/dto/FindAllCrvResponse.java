@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class FindAllCrvResponse {
 
-    private int total;
+    private long total;
 
     private List<FindAllCrvResponse.CrvLookupResponse> crvs;
 

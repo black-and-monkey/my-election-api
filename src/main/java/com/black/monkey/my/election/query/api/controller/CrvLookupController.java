@@ -64,7 +64,7 @@ public class CrvLookupController {
         }
         return new ResponseEntity<>(FindAllCrvResponse.builder()
                 .crvs(responseList)
-                .total(crvs.getNumberOfElements())
+                .total(crvs.getTotalElements())
                 .build(),
                 HttpStatus.OK);
     }
@@ -141,7 +141,7 @@ public class CrvLookupController {
                 .build());
 
         RegisteredVotesResponse response = RegisteredVotesResponse.builder()
-                .total(votes.getNumberOfElements())
+                .total(votes.getTotalElements())
                 .votes(new ArrayList<>(votes.getSize()))
                 .build();
 

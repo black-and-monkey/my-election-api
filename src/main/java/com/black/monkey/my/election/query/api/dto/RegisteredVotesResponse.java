@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class RegisteredVotesResponse {
 
-    private int total;
+    private long total;
 
     private List<RegisteredVoteResponse> votes;
 
