@@ -62,3 +62,4 @@ Detalle de CRVs
 
 * Ingresar nota
 * Cierre de mesa, al cerrar la mesa permite dejar unas notas adicionales de cierre
+

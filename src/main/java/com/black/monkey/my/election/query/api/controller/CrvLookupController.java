@@ -98,6 +98,7 @@ public class CrvLookupController {
                 HttpStatus.OK);
     }
 
+
     @GetMapping(path = "/my-crv")
     public ResponseEntity<CrvLookupResponse> getCrv() {
 
@@ -119,9 +120,22 @@ public class CrvLookupController {
     @GetMapping(path = "/registered-votes", params = { "page", "size" })
     public ResponseEntity<RegisteredVotesResponse> getRegisteredVotes(@RequestParam(value = "page", defaultValue = "0") int page,
                                                                       @RequestParam(value = "size", defaultValue = "20") int size) {
+        return new ResponseEntity<>(getVotes(auth0Client.getUserCrv(),page, size), HttpStatus.OK);
+    }
 
+
+    @GetMapping(path = "/registered-votes/by-id", params = { "id", "page", "size" })
+    public ResponseEntity<RegisteredVotesResponse> getRegisteredVotesByCrv(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                    @RequestParam(value = "size", defaultValue = "20") int size,
+                                                                    @RequestParam(value = "id") String crvId,
+                                                                    HttpServletRequest request) {
+        permissionHelper.hasAuthority(request);
+        return new ResponseEntity<>(getVotes(crvId, page, size), HttpStatus.OK);
+    }
+
+    private RegisteredVotesResponse getVotes(String crvId, int page, int size) {
         Page<VoteRegistration> votes = queryDispatcher.send(FindRegisteredVotesQuery.builder()
-                .crvId(auth0Client.getUserCrv())
+                .crvId(crvId)
                 .page(page)
                 .size(size)
                 .build());
@@ -139,11 +153,8 @@ public class CrvLookupController {
                     .voteNumber(vote.getVoteNumber())
                     .build());
         }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-
+        return response;
     }
-
 }
 
 
