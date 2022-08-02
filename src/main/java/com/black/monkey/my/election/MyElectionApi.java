@@ -13,6 +13,8 @@ import com.black.monkey.my.election.commons.event.CrvOpenedEvent;
 import com.black.monkey.my.election.commons.event.NoteAddedEvent;
 import com.black.monkey.my.election.commons.event.VoteRegisteredEvent;
 import com.black.monkey.my.election.commons.event.VoteUnRegisteredEvent;
+import com.black.monkey.my.election.query.api.query.FindAllCrvQuery;
+import com.black.monkey.my.election.query.api.query.FindAllNotesQuery;
 import com.black.monkey.my.election.query.api.query.FindCrvByIdQuery;
 import com.black.monkey.my.election.query.api.query.FindRegisteredVotesQuery;
 import com.black.monkey.my.election.query.hanlder.EventHandler;
@@ -68,6 +70,10 @@ public class MyElectionApi {
 
         queryDispatcher.registerHandler(FindCrvByIdQuery.class, queryHandler::handle);
         queryDispatcher.registerHandler(FindRegisteredVotesQuery.class, queryHandler::handle);
+        queryDispatcher.registerHandler(FindAllCrvQuery.class, queryHandler::handle);
+        queryDispatcher.registerHandler(FindAllNotesQuery.class, queryHandler::handle);
+
+
 
 
     }

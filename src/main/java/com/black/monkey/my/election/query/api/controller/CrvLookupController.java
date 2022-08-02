@@ -1,11 +1,17 @@
 package com.black.monkey.my.election.query.api.controller;
 
+import com.black.monkey.my.election.commons.api.security.PermissionHelper;
 import com.black.monkey.my.election.commons.client.Auth0Client;
 import com.black.monkey.my.election.query.api.dto.CrvLookupResponse;
+import com.black.monkey.my.election.query.api.dto.FindAllCrvResponse;
+import com.black.monkey.my.election.query.api.dto.FindNotesResponse;
 import com.black.monkey.my.election.query.api.dto.RegisteredVotesResponse;
+import com.black.monkey.my.election.query.api.query.FindAllCrvQuery;
+import com.black.monkey.my.election.query.api.query.FindAllNotesQuery;
 import com.black.monkey.my.election.query.api.query.FindCrvByIdQuery;
 import com.black.monkey.my.election.query.api.query.FindRegisteredVotesQuery;
 import com.black.monkey.my.election.query.domain.Crv;
+import com.black.monkey.my.election.query.domain.Note;
 import com.black.monkey.my.election.query.domain.VoteRegistration;
 import com.black.monkey.my.election.query.infraestructure.QueryDispatcher;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/crv-lookup")
@@ -28,6 +36,67 @@ public class CrvLookupController {
 
     private final QueryDispatcher queryDispatcher;
     private final Auth0Client auth0Client;
+    private final PermissionHelper permissionHelper;
+
+    @GetMapping(path = "/find-all", params = { "page", "size" })
+    public ResponseEntity<FindAllCrvResponse> getAllCrv(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                        @RequestParam(value = "size", defaultValue = "20") int size,
+                                                        HttpServletRequest request) {
+        permissionHelper.hasAuthority(request);
+        Page<Crv> crvs = queryDispatcher.send(FindAllCrvQuery.builder()
+                .page(page)
+                .size(size)
+                .build());
+        List<FindAllCrvResponse.CrvLookupResponse> responseList = new ArrayList<>(crvs.getSize());
+
+        for (Crv crv: crvs.getContent()) {
+            responseList.add(FindAllCrvResponse.CrvLookupResponse.builder()
+                    .description(crv.getDescription())
+                    .id(crv.getId())
+                    .isOpened(crv.isOpened())
+                    .openBy(crv.getOpenedBy()!= null ? crv.getOpenedBy().getEmail() : null)
+                    .closeBy(crv.getClosedBy() != null ? crv.getClosedBy().getEmail(): null)
+                    .closeTimestamp(crv.getClosedAt())
+                    .openTimestamp(crv.getOpenedAt())
+                    .departamento(crv.getDepartamento())
+                    .locallidad(crv.getLocalidad())
+                    .build());
+        }
+        return new ResponseEntity<>(FindAllCrvResponse.builder()
+                .crvs(responseList)
+                .total(crvs.getNumberOfElements())
+                .build(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/find-notes", params = { "id", "page", "size" })
+    public ResponseEntity<FindNotesResponse> getAllNotesByCrv(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                               @RequestParam(value = "size", defaultValue = "20") int size,
+                                                               @RequestParam(value = "id") String crvId,
+                                                               HttpServletRequest request) {
+        permissionHelper.hasAuthority(request);
+
+        Page<Note> notes = queryDispatcher.send(FindAllNotesQuery.builder()
+                .page(page)
+                .size(size)
+                .crvId(crvId)
+                .build());
+
+        List<FindNotesResponse.Note> responseList = new ArrayList<>(notes.getSize());
+
+        for (Note note: notes.getContent()) {
+            responseList.add(FindNotesResponse.Note.builder()
+                    .note(note.getNote())
+                    .noteBy(note.getRegisteredBy().getEmail())
+                    .timestamp(note.getTimestamp())
+                    .build());
+        }
+        return new ResponseEntity<>(FindNotesResponse.builder()
+                .notes(responseList)
+                .total(notes.getNumberOfElements())
+                .build(),
+                HttpStatus.OK);
+    }
 
     @GetMapping(path = "/my-crv")
     public ResponseEntity<CrvLookupResponse> getCrv() {

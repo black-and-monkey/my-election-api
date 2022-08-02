@@ -6,6 +6,7 @@ import com.black.monkey.my.election.core.exceptions.AggregateNotFoundException;
 import com.black.monkey.my.election.core.exceptions.CrvDoesntExistException;
 import com.black.monkey.my.election.core.exceptions.CrvIsOpenException;
 import com.black.monkey.my.election.core.exceptions.InvalidDobException;
+import com.black.monkey.my.election.core.exceptions.NoPermissionException;
 import com.black.monkey.my.election.core.exceptions.PreviousVoteException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,14 @@ public class GlobalExceptionHandler {
         log.warn("{}", exception.getMessage());
         return new ResponseEntity(BaseResponse.builder().message(exception.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
+
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler
+    public void exception(NoPermissionException exception) {
+        log.warn("{}", exception.getMessage());
+    }
+
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler

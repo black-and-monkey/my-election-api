@@ -3,6 +3,7 @@ package com.black.monkey.my.election.cmd.api.controller;
 import com.black.monkey.my.election.cmd.api.command.VoteRegistrationCommand;
 import com.black.monkey.my.election.cmd.api.command.VoteUnRegistrationCommand;
 import com.black.monkey.my.election.cmd.infraestructure.CommandDispatcher;
+import com.black.monkey.my.election.commons.api.security.PermissionHelper;
 import com.black.monkey.my.election.commons.client.Auth0Client;
 import com.black.monkey.my.election.commons.client.auth0.dto.GetUserPermissions;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(path ="/api/v1/vote-registration")
 @Slf4j
@@ -24,6 +27,7 @@ public class VoteRegistrationController {
 
     private final CommandDispatcher commandDispatcher;
     private final Auth0Client auth0Client;
+    private final PermissionHelper permissionHelper;
 
     @PostMapping
     public ResponseEntity voteRegistration(@RequestBody VoteRegistrationCommand command) {
@@ -36,22 +40,9 @@ public class VoteRegistrationController {
 
 
     @DeleteMapping(params = { "ci"})
-    public ResponseEntity voteRegistrationDelete(@RequestParam(value = "ci") String ci) {
+    public ResponseEntity voteRegistrationDelete(@RequestParam(value = "ci") String ci, HttpServletRequest request) {
 
-        boolean hasRights = false;
-
-        // FIXME too manual
-        for (GetUserPermissions.Permission permission : auth0Client.getUserPermissions().getPermissions()) {
-            if ("delete:vote".equals(permission.getPermissionName())) {
-                hasRights = true;
-                break;
-            }
-        }
-
-        if (!hasRights) {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-
+        permissionHelper.hasAuthority(request);
 
         VoteUnRegistrationCommand command = new VoteUnRegistrationCommand();
         command.setId(auth0Client.getUserCrv());

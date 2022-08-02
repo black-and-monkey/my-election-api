@@ -1,5 +1,7 @@
 package com.black.monkey.my.election.query.domain;
 
+import com.black.monkey.my.election.core.domain.BaseEntity;
+import com.black.monkey.my.election.core.queries.BaseQuery;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +26,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Note {
+public class Note extends BaseEntity {
 
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
