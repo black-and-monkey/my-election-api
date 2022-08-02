@@ -71,9 +71,9 @@ public class CrvLookupController {
 
     @GetMapping(path = "/find-notes", params = { "id", "page", "size" })
     public ResponseEntity<FindNotesResponse> getAllNotesByCrv(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                               @RequestParam(value = "size", defaultValue = "20") int size,
-                                                               @RequestParam(value = "id") String crvId,
-                                                               HttpServletRequest request) {
+                                                              @RequestParam(value = "size", defaultValue = "20") int size,
+                                                              @RequestParam(value = "id") String crvId,
+                                                              HttpServletRequest request) {
         permissionHelper.hasAuthority(request);
 
         Page<Note> notes = queryDispatcher.send(FindAllNotesQuery.builder()
@@ -93,7 +93,7 @@ public class CrvLookupController {
         }
         return new ResponseEntity<>(FindNotesResponse.builder()
                 .notes(responseList)
-                .total(notes.getNumberOfElements())
+                .total(notes.getTotalElements())
                 .build(),
                 HttpStatus.OK);
     }
@@ -126,9 +126,9 @@ public class CrvLookupController {
 
     @GetMapping(path = "/registered-votes/by-id", params = { "id", "page", "size" })
     public ResponseEntity<RegisteredVotesResponse> getRegisteredVotesByCrv(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                                    @RequestParam(value = "size", defaultValue = "20") int size,
-                                                                    @RequestParam(value = "id") String crvId,
-                                                                    HttpServletRequest request) {
+                                                                           @RequestParam(value = "size", defaultValue = "20") int size,
+                                                                           @RequestParam(value = "id") String crvId,
+                                                                           HttpServletRequest request) {
         permissionHelper.hasAuthority(request);
         return new ResponseEntity<>(getVotes(crvId, page, size), HttpStatus.OK);
     }

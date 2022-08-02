@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class FindNotesResponse {
 
-    private int total;
+    private long total;
 
     private List<FindNotesResponse.Note> notes;
 
