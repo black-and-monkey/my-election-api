@@ -37,8 +37,8 @@ public class SecurityConfig {
         */
         http.authorizeRequests()
                 .mvcMatchers("/api/public").permitAll()
-                .mvcMatchers("/api/private").authenticated()
-                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
+                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages") // will not work with Auth0
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .mvcMatchers("/api/v1/open-crv").authenticated()
                 .mvcMatchers("/api/v1/close-crv").authenticated()
                 .mvcMatchers("/api/v1/note").authenticated()
