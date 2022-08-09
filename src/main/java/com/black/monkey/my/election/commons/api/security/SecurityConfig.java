@@ -14,10 +14,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
-import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,19 +37,28 @@ public class SecurityConfig {
         This is where we configure the security required for our endpoints and setup our app to serve as
         an OAuth2 Resource Server, using JWT validation.
         */
-        http.authorizeRequests()
+        http
+                .csrf().disable().cors().disable()
+                .authorizeRequests()
                 .mvcMatchers("/api/public").permitAll()
-                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages") // will not work with Auth0
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages") // will not work with Auth0
                 .mvcMatchers("/api/v1/open-crv").authenticated()
                 .mvcMatchers("/api/v1/close-crv").authenticated()
                 .mvcMatchers("/api/v1/note").authenticated()
                 .antMatchers(HttpMethod.POST,"/api/v1/vote-registration").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/api/v1/vote-registration").authenticated()
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
-                .and().cors()
                 .and().oauth2ResourceServer().jwt();
+
         return http.build();
+    }
+
+    @Bean
+    protected CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
 
     @Value("${spring.security.oauth2.resourceserver.jwt.jwks}")
