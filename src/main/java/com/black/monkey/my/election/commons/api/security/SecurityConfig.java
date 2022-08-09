@@ -51,6 +51,8 @@ public class SecurityConfig {
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
                 .and().oauth2ResourceServer().jwt();
 
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+
         return http.build();
     }
 
