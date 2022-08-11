@@ -23,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,15 +52,19 @@ public class SecurityConfig {
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
                 .and().oauth2ResourceServer().jwt();
 
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+        //http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()); // THIS DOESNT contains PUT XD
+        http.cors().configurationSource(corsConfigurationSource());
 
         return http.build();
     }
 
     @Bean
-    protected CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
