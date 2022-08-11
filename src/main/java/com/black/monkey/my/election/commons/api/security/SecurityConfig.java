@@ -52,19 +52,18 @@ public class SecurityConfig {
                 .mvcMatchers("/api/v1/crv-lookup/my-crv").authenticated()
                 .and().oauth2ResourceServer().jwt();
 
-        //http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()); // THIS DOESNT contains PUT XD
         http.cors().configurationSource(corsConfigurationSource());
 
         return http.build();
     }
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "OPTIONS", "PUT"));
+    protected CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+
+        CorsConfiguration cors = new CorsConfiguration().applyPermitDefaultValues();
+        cors.setAllowedMethods(Arrays.asList("PUT", "GET", "POST", "OPTIONS"));
+        source.registerCorsConfiguration("/**", cors);
         return source;
     }
 
