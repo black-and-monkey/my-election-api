@@ -30,7 +30,7 @@ public class CrvEventStore implements EventStore {
 
     @Override
     public void saveEvents(String aggregateId, Iterable<BaseEvent> events, int expectedVersion) {
-        var eventStream = eventStoreRepository.findByAggregateIdentifier(aggregateId);
+        var eventStream = eventStoreRepository.findByAggregateIdentifierOrderByTimestampAsc(aggregateId);
         if (expectedVersion != -1 && eventStream.get(eventStream.size()-1).getVersion() != expectedVersion) {
             throw new RuntimeException("version is not correct");
         }

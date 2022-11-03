@@ -21,4 +21,6 @@ public abstract class BaseEvent {
 
     private LocalDateTime timestamp;
 
+
+
 }
