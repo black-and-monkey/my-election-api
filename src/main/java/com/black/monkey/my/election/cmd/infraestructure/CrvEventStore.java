@@ -5,7 +5,6 @@ import com.black.monkey.my.election.cmd.domain.CrvAggregate;
 import com.black.monkey.my.election.cmd.domain.EventModel;
 import com.black.monkey.my.election.cmd.domain.EventStoreRepository;
 import com.black.monkey.my.election.core.event.BaseEvent;
-import com.black.monkey.my.election.core.exceptions.AggregateNotFoundException;
 import com.black.monkey.my.election.core.infraestructure.EventStore;
 import com.black.monkey.my.election.core.producers.EventProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -61,7 +59,7 @@ public class CrvEventStore implements EventStore {
 
     @Override
     public List<BaseEvent> getEvents(String aggregateId) {
-        List<EventModel> eventModels = eventStoreRepository.findByAggregateIdentifier(aggregateId);
+        List<EventModel> eventModels = eventStoreRepository.findByAggregateIdentifierOrderByTimestampAsc(aggregateId);
         if (eventModels.isEmpty()) {
             return Collections.emptyList();
         }

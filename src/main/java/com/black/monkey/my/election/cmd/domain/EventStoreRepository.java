@@ -10,4 +10,6 @@ import java.util.List;
 public interface EventStoreRepository extends CrudRepository<EventModel, String> {
 
     List<EventModel> findByAggregateIdentifier(String aggregateIdentifier);
+
+    List<EventModel> findByAggregateIdentifierOrderByTimestampAsc(String aggregateIdentifier);
 }
