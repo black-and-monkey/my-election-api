@@ -114,7 +114,11 @@ public class Auth0Client {
         String sub = TokenHelper.decodeToken().get("sub").toString();
 
         if (userResponseCache.containsKey(sub)) {
-            return userResponseCache.get(sub);
+            var user = userResponseCache.get(sub);
+            if (user.getAppMetadata().containsKey("crv")) {
+                log.info("using cached user, sub {}, CRV cached is: {}",sub,user.getAppMetadata().get("crv"));
+            }
+            return user;
         }
 
         ResponseEntity<GetUserResponse> userResponse = getUser(sub);
