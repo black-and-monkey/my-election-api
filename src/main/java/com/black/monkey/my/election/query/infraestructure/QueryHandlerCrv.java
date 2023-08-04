@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +32,13 @@ public class QueryHandlerCrv implements QueryHandler {
 
     @Override
     public Page<BaseEntity> handle(FindCrvByIdQuery query) {
-        Optional<Crv> optional = crvRepository.findCrvById(query.getId());
+        /** FIXME  PRINTING ALL CRVS */
+        Iterator<BaseEntity> it = crvRepository.findAll(PageRequest.of(0,1000)).iterator();
+        while (it.hasNext()) {
+            log.info("{}",it.next().toString());
+        }
+
+        Optional<Crv> optional = crvRepository.findById(query.getId());
         log.info("CRV {} found ? {}", query.getId(), optional.isPresent());
         return optional.isPresent() ?
                 new PageImpl<>(List.of(optional.get()))
