@@ -115,8 +115,10 @@ public class Auth0Client {
 
         if (userResponseCache.containsKey(sub)) {
             var user = userResponseCache.get(sub);
-            if (user.getAppMetadata().containsKey("crv")) {
-                log.info("using cached user, sub {}, CRV cached is: {}",sub,user.getAppMetadata().get("crv"));
+            if (log.isDebugEnabled()) {
+                if (user.getAppMetadata().containsKey("crv")) {
+                    log.info("using cached user, sub {}, CRV cached is: {}", sub, user.getAppMetadata().get("crv"));
+                }
             }
             return user;
         }
@@ -134,9 +136,9 @@ public class Auth0Client {
     public GetUserPermissions getUserPermissions() {
         String sub = TokenHelper.decodeToken().get("sub").toString();
 
-//        if (userPermissionsResponseCache.containsKey(sub)) {
-//            return userPermissionsResponseCache.get(sub);
-//        }
+        if (userPermissionsResponseCache.containsKey(sub)) {
+            return userPermissionsResponseCache.get(sub);
+        }
 
         String url = String.format("%s/api/v2/users/%s/permissions?include_totals=true", baseUrl, sub);
         log.debug(url);

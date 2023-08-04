@@ -93,6 +93,5 @@ class AppRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("URL {}",dataSource.getConnection().getMetaData().getURL());
-        log.info("username {}",dataSource.getConnection().getMetaData().getUserName());
     }
 }

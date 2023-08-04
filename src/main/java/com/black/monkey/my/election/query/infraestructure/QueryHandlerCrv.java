@@ -32,14 +32,9 @@ public class QueryHandlerCrv implements QueryHandler {
 
     @Override
     public Page<BaseEntity> handle(FindCrvByIdQuery query) {
-        /** FIXME  PRINTING ALL CRVS */
-        Iterator<BaseEntity> it = crvRepository.findAll(PageRequest.of(0,1000)).iterator();
-        while (it.hasNext()) {
-            log.info("{}",it.next().toString());
-        }
 
         Optional<Crv> optional = crvRepository.findById(query.getId());
-        log.info("CRV {} found ? {}", query.getId(), optional.isPresent());  /** FIXME  PRINTING  */
+
         return optional.isPresent() ?
                 new PageImpl<>(List.of(optional.get()))
                 : Page.empty();
