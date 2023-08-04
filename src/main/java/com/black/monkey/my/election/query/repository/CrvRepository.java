@@ -7,8 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface CrvRepository extends CrudRepository<Crv, String> {
 
     @Query("SELECT v FROM Crv v")
     Page<BaseEntity> findAll(PageRequest pageRequest);
+
+    @Query("SELECT x FROM Crv x WHERE x.id = :id")
+    Optional<Crv> findCrvById(String id);
 }

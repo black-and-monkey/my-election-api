@@ -22,12 +22,12 @@ public class Crv extends BaseEntity {
 
     private boolean isOpened;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private MyUser openedBy;
 
     private LocalDateTime closedAt;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private MyUser closedBy;
 
     @Enumerated(EnumType.STRING)

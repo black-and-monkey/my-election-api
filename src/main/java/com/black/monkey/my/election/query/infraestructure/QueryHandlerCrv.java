@@ -30,7 +30,7 @@ public class QueryHandlerCrv implements QueryHandler {
 
     @Override
     public Page<BaseEntity> handle(FindCrvByIdQuery query) {
-        Optional<Crv> optional = crvRepository.findById(query.getId());
+        Optional<Crv> optional = crvRepository.findCrvById(query.getId());
         return optional.isPresent() ?
                 new PageImpl(List.of(optional.get()))
                 : Page.empty();
