@@ -22,9 +22,15 @@ import com.black.monkey.my.election.query.infraestructure.EventDispatcher;
 import com.black.monkey.my.election.query.infraestructure.QueryDispatcher;
 import com.black.monkey.my.election.query.infraestructure.QueryHandler;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
 
 
 @SpringBootApplication
@@ -60,22 +66,33 @@ public class MyElectionApi {
         commandDispatcher.registerHandler(VoteUnRegistrationCommand.class, commandHandler::handler);
         commandDispatcher.registerHandler(NoteAddCommand.class, commandHandler::handler);
 
-
         eventDispatcher.registerHandler(CrvOpenedEvent.class, eventHandler::handler);
         eventDispatcher.registerHandler(CrvClosedEvent.class, eventHandler::handler);
         eventDispatcher.registerHandler(VoteRegisteredEvent.class, eventHandler::handler);
         eventDispatcher.registerHandler(VoteUnRegisteredEvent.class, eventHandler::handler);
         eventDispatcher.registerHandler(NoteAddedEvent.class, eventHandler::handler);
 
-
         queryDispatcher.registerHandler(FindCrvByIdQuery.class, queryHandler::handle);
         queryDispatcher.registerHandler(FindRegisteredVotesQuery.class, queryHandler::handle);
         queryDispatcher.registerHandler(FindAllCrvQuery.class, queryHandler::handle);
         queryDispatcher.registerHandler(FindAllNotesQuery.class, queryHandler::handle);
-
-
-
-
     }
 
+}
+
+@Component
+@Slf4j
+class AppRunner implements ApplicationRunner {
+
+    private final DataSource dataSource;
+
+    public AppRunner(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        log.info("URL {}",dataSource.getConnection().getMetaData().getURL());
+        log.info("username {}",dataSource.getConnection().getMetaData().getUserName());
+    }
 }

@@ -39,7 +39,7 @@ public class QueryHandlerCrv implements QueryHandler {
         }
 
         Optional<Crv> optional = crvRepository.findById(query.getId());
-        log.info("CRV {} found ? {}", query.getId(), optional.isPresent());
+        log.info("CRV {} found ? {}", query.getId(), optional.isPresent());  /** FIXME  PRINTING  */
         return optional.isPresent() ?
                 new PageImpl<>(List.of(optional.get()))
                 : Page.empty();
