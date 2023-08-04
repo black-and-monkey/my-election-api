@@ -10,6 +10,7 @@ import com.black.monkey.my.election.query.repository.CrvRepository;
 import com.black.monkey.my.election.query.repository.NoteRepository;
 import com.black.monkey.my.election.query.repository.VoteRegistrationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QueryHandlerCrv implements QueryHandler {
 
     private final CrvRepository crvRepository;
@@ -31,8 +33,9 @@ public class QueryHandlerCrv implements QueryHandler {
     @Override
     public Page<BaseEntity> handle(FindCrvByIdQuery query) {
         Optional<Crv> optional = crvRepository.findCrvById(query.getId());
+        log.info("CRV {} found ? {}", query.getId(), optional.isPresent());
         return optional.isPresent() ?
-                new PageImpl(List.of(optional.get()))
+                new PageImpl<>(List.of(optional.get()))
                 : Page.empty();
     }
 

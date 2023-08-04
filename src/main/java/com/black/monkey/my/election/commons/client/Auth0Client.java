@@ -134,9 +134,9 @@ public class Auth0Client {
     public GetUserPermissions getUserPermissions() {
         String sub = TokenHelper.decodeToken().get("sub").toString();
 
-        if (userPermissionsResponseCache.containsKey(sub)) {
-            return userPermissionsResponseCache.get(sub);
-        }
+//        if (userPermissionsResponseCache.containsKey(sub)) {
+//            return userPermissionsResponseCache.get(sub);
+//        }
 
         String url = String.format("%s/api/v2/users/%s/permissions?include_totals=true", baseUrl, sub);
         log.debug(url);
