@@ -102,10 +102,11 @@ public class CrvLookupController {
     @GetMapping(path = "/my-crv")
     public ResponseEntity<CrvLookupResponse> getCrv() {
 
-        Page<Crv> crvList = queryDispatcher.send(FindCrvByIdQuery.builder().id(auth0Client.getUserCrv()).build());
+        var currentCRV = auth0Client.getUserCrv();
+        Page<Crv> crvList = queryDispatcher.send(FindCrvByIdQuery.builder().id(currentCRV).build());
 
         if (crvList.isEmpty()) {
-            log.error("user without crv {}",auth0Client.getUser().getEmail());
+            log.error("user without cr, user {}, crv {}", auth0Client.getUser().getEmail(), currentCRV);
             return new ResponseEntity("no CRV associated", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
