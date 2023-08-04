@@ -25,7 +25,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "events", schema = "my_election")
+@Table(name = "events", schema = "public")
 public class EventModel {
 
     @Id
