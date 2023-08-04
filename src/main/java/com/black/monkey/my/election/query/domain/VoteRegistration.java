@@ -21,7 +21,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "vote_registration", schema = "my_election")
+@Table(name = "vote_registration", schema = "public")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

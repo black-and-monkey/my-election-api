@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @Entity
-@Table(name = "my_user", schema = "my_election")
+@Table(name = "my_user", schema = "public")
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyUser {

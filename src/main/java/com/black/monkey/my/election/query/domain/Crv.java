@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "crv", schema = "my_election")
+@Table(name = "crv", schema = "public")
 @Getter
 @Setter
 public class Crv extends BaseEntity {
