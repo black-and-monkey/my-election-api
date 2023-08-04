@@ -65,7 +65,7 @@ VALUES
 
 INSERT INTO crv (id,closed_at,departamento,description,is_opened,localidad,opened_at,closed_by_email,opened_by_email)
 VALUES
-    ('FAKE',NULL,'FAKE','for the sake of testing',true,'',NULL,NULL,'juan.garbora@gmail.com'),
+    ('999',NULL,'FAKE','for the sake of testing',true,'',NULL,NULL,'juan.garbora@gmail.com'),
     ('001',NULL,'MONTEVIDEO','Cordon - Casa del Partido',true,'Cordon','2022-10-14 21:08:59.203298',NULL,'diegoguidobono@gmail.com'),
     ('033',NULL,'MONTEVIDEO','Melilla - Salon al lado de laCapilla San Gerardo',true,'Melilla','2022-10-14 21:19:28.868194',NULL,'crv033@gx.uy'),
     ('025',NULL,'MONTEVIDEO','Malvin - Casa de familia',true,'Malvin','2022-10-18 13:34:38.757744',NULL,'099299695@gx.uy'),
