@@ -14,6 +14,7 @@ import com.black.monkey.my.election.query.domain.Crv;
 import com.black.monkey.my.election.query.domain.Note;
 import com.black.monkey.my.election.query.domain.VoteRegistration;
 import com.black.monkey.my.election.query.infraestructure.QueryDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,10 +102,11 @@ public class CrvLookupController {
     @GetMapping(path = "/my-crv")
     public ResponseEntity<CrvLookupResponse> getCrv() {
 
-        Page<Crv> crvList = queryDispatcher.send(FindCrvByIdQuery.builder().id(auth0Client.getUserCrv()).build());
+        var currentCRV = auth0Client.getUserCrv();
+        Page<Crv> crvList = queryDispatcher.send(FindCrvByIdQuery.builder().id(currentCRV).build());
 
         if (crvList.isEmpty()) {
-            log.error("user without crv {}",auth0Client.getUser().getEmail());
+            log.error("user without cr, user {}, crv {}", auth0Client.getUser().getEmail(), currentCRV);
             return new ResponseEntity("no CRV associated", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

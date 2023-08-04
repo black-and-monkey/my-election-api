@@ -4,6 +4,7 @@ import com.black.monkey.my.election.commons.client.auth0.dto.GetUserPermissions;
 import com.black.monkey.my.election.commons.client.auth0.dto.GetUserResponse;
 import com.black.monkey.my.election.commons.helper.TokenHelper;
 import com.black.monkey.my.election.core.exceptions.UserWithoutCRVException;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.text.MessageFormat;
 import java.time.Clock;
 import java.time.Instant;
@@ -40,14 +40,14 @@ public class Auth0Client {
     @Value("${auth0.management.api.audience}")
     private String audience;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private ResponseEntity<LinkedHashMap> tokenResponse;
 
     private Instant tokenExpirationTime;
 
-    private Map<String, GetUserResponse> userResponseCache = new HashMap<>(); // TODO swap to REDIS
-    private Map<String, GetUserPermissions> userPermissionsResponseCache = new HashMap<>(); // TODO swap to REDIS
+    private final Map<String, GetUserResponse> userResponseCache = new HashMap<>(); // TODO swap to REDIS
+    private final Map<String, GetUserPermissions> userPermissionsResponseCache = new HashMap<>(); // TODO swap to REDIS
 
     @PostConstruct
     void init() {
