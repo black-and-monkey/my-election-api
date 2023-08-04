@@ -21,11 +21,11 @@ import com.black.monkey.my.election.query.hanlder.EventHandler;
 import com.black.monkey.my.election.query.infraestructure.EventDispatcher;
 import com.black.monkey.my.election.query.infraestructure.QueryDispatcher;
 import com.black.monkey.my.election.query.infraestructure.QueryHandler;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class MyElectionApi {

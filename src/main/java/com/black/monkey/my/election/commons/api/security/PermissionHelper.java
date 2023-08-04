@@ -3,12 +3,13 @@ package com.black.monkey.my.election.commons.api.security;
 import com.black.monkey.my.election.commons.client.Auth0Client;
 import com.black.monkey.my.election.commons.client.auth0.dto.GetUserPermissions;
 import com.black.monkey.my.election.core.exceptions.NoPermissionException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.text.MessageFormat;
 
 @Service

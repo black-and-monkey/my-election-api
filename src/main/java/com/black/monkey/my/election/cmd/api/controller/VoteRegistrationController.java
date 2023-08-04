@@ -5,19 +5,13 @@ import com.black.monkey.my.election.cmd.api.command.VoteUnRegistrationCommand;
 import com.black.monkey.my.election.cmd.infraestructure.CommandDispatcher;
 import com.black.monkey.my.election.commons.api.security.PermissionHelper;
 import com.black.monkey.my.election.commons.client.Auth0Client;
-import com.black.monkey.my.election.commons.client.auth0.dto.GetUserPermissions;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+
 
 @RestController
 @RequestMapping(path ="/api/v1/vote-registration")

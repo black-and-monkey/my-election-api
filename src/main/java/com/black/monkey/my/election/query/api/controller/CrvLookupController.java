@@ -14,6 +14,7 @@ import com.black.monkey.my.election.query.domain.Crv;
 import com.black.monkey.my.election.query.domain.Note;
 import com.black.monkey.my.election.query.domain.VoteRegistration;
 import com.black.monkey.my.election.query.infraestructure.QueryDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 

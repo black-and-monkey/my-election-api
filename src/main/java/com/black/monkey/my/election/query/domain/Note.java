@@ -1,21 +1,11 @@
 package com.black.monkey.my.election.query.domain;
 
 import com.black.monkey.my.election.core.domain.BaseEntity;
-import com.black.monkey.my.election.core.queries.BaseQuery;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
