@@ -65,9 +65,8 @@ public class CommandHandlerCrv implements CommandHandler {
 
         UruguayanCiTool.check(command.getCi());
 
-        if (command.getDob().isBefore(LocalDate.of(1991,11,6)) ||
-                command.getDob().isAfter(LocalDate.of(2008,11,5))) {
-            throw new InvalidDobException(MessageFormat.format("Fecha de nacimiento invalida: {0}, debe ser entre 6/11/1991 y 5/11/2008",command.getDob()));
+        if (command.getDob().isBefore(LocalDate.of(2009,8,6))) {
+            throw new InvalidDobException(MessageFormat.format("Fecha de nacimiento invalida: {0}, debe ser a partir de entre 6/8/2009",command.getDob()));
         }
 
         Optional<VoteRegistration> previousVote = voteRegistrationRepository.findByCi(StringUtils.getDigits(command.getCi()));
